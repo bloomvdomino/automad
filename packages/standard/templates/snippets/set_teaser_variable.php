@@ -2,10 +2,16 @@
 <# Reset variable to false in case there is no match. #>
 <@~ set { :teaser: false } @>
 <# Try to get first paragraph from content. #>
-<@~ set { :teaser: 
-	@{ +main | 
-		def (@{ textTeaser | markdown }) | 
-		def (@{ text | markdown }) |
-		findFirstParagraph 
-	}
-} @>
+<@~ if not @{ textTeaser } @>
+	<@~ set { :teaser: 
+		@{ +main | 
+			def (@{ textTeaser | markdown }) | 
+			def (@{ text | markdown }) |
+			findFirstParagraph 
+		}
+	} @>
+<@~ else @>
+	<@~ set { :teaser: 
+		@{ textTeaser | markdown | replace ('/\r\n|\r|\n/','') }
+	} @>
+<@~ end @>
